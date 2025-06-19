@@ -18,26 +18,28 @@ type CartContextType = {
   increaseQty: (id: number) => void;
   decreaseQty: (id: number) => void;
   clearCart: () => void;
+  isCartOpen: boolean;
+  setIsCartOpen: (open: boolean) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addToCart = (product: Product) => {
     setCartItems(prevItems => {
       const existing = prevItems.find(item => item.id === product.id);
       if (existing) {
-        // Si déjà dans le panier, augmenter la quantité
         return prevItems.map(item =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       } else {
-        // Sinon, ajouter avec quantité 1
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });
+    setIsCartOpen(true); // Ouvre le popup à chaque ajout
   };
 
   const removeFromCart = (id: number) => {
@@ -58,7 +60,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         .map(item =>
           item.id === id ? { ...item, quantity: item.quantity - 1 } : item
         )
-        .filter(item => item.quantity > 0) // Supprime si quantité = 0
+        .filter(item => item.quantity > 0)
     );
   };
 
@@ -67,7 +69,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, increaseQty, decreaseQty, clearCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, increaseQty, decreaseQty, clearCart, isCartOpen, setIsCartOpen }}>
       {children}
     </CartContext.Provider>
   );

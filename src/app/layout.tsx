@@ -1,6 +1,7 @@
 import './globals.css'
 import { CartProvider } from '../context/CartContext'
-import Link from 'next/link' // ✅ Ajout de Link
+import Link from 'next/link'
+import CartPopup from '../components/CartPopup'
 
 export const metadata = {
   title: 'Tom Boutique',
@@ -19,7 +20,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/cart" className="hover:underline">Panier</Link>
             </nav>
           </header>
+          
           <main className="p-6 max-w-4xl mx-auto">{children}</main>
+
+          {/* Inclusion du popup ici pour qu'il soit accessible sur toutes les pages */}
+          <CartPopup />
         </CartProvider>
       </body>
     </html>

@@ -15,16 +15,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartProvider>
           <header className="bg-black text-white p-4 flex justify-between items-center">
             <h1 className="text-xl font-bold">Tom Boutique</h1>
-            <nav>
-              <Link href="/" className="mr-4 hover:underline">Produits</Link>
-              <Link href="/cart" className="hover:underline">Panier</Link>
+            <nav className="flex gap-4 items-center">
+              <Link href="/" className="hover:underline">Produits</Link>
+
+              {/* ✅ Intégré ici pour que le menu s’ouvre sous "Panier" */}
+              <div className="relative">
+                <CartPopup />
+              </div>
             </nav>
           </header>
-          
-          <main className="p-6 max-w-4xl mx-auto">{children}</main>
 
-          {/* Inclusion du popup ici pour qu'il soit accessible sur toutes les pages */}
-          <CartPopup />
+          <main className="p-6 max-w-4xl mx-auto">{children}</main>
         </CartProvider>
       </body>
     </html>

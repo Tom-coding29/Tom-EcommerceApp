@@ -26,17 +26,42 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const addToCart = (product: Product) => {
-    // logique d'ajout
+    setCartItems(prevItems => {
+      const existing = prevItems.find(item => item.id === product.id);
+      if (existing) {
+        // Si déjà dans le panier, augmenter la quantité
+        return prevItems.map(item =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      } else {
+        // Sinon, ajouter avec quantité 1
+        return [...prevItems, { ...product, quantity: 1 }];
+      }
+    });
   };
+
   const removeFromCart = (id: number) => {
-    // logique suppression
+    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
   };
+
   const increaseQty = (id: number) => {
-    // logique augmentation quantité
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
   };
+
   const decreaseQty = (id: number) => {
-    // logique diminution quantité
+    setCartItems(prevItems =>
+      prevItems
+        .map(item =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter(item => item.quantity > 0) // Supprime si quantité = 0
+    );
   };
+
   const clearCart = () => {
     setCartItems([]);
   };
